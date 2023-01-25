@@ -9,7 +9,8 @@ import datetime
 
 conn = sqlite3.connect("newDB")
 c = conn.cursor()
-#c.execute('''CREATE TABLE cpu(date DATE, store TEXT, title TEXT, price REAL)''')
+#c.execute('''DROP TABLE cpu''')
+c.execute('''CREATE TABLE cpu(date DATE, store TEXT, title TEXT, price REAL, stock TEXT)''')
 
 def scrape(url):
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:81.0) Gecko/20100101 Firefox/81.0'}
@@ -19,9 +20,9 @@ def scrape(url):
     store = 'OVC'
     title = soup.find('h1').text.strip().replace('\n', '')
     price = soup.find('span', {'class': 'price__amount'}).text.replace('*', '').strip().replace('£', '')
-    #stock = soup.find('span', {'class': 'popup-text'}).text.strip()
-    c.execute('''INSERT INTO cpu VALUES(?,?,?,?)''', (current_date, store, title, price))
-    #print(current_date, store, title, price)
+    stock = soup.find('span', {'class': 'small d-inline-block ml-1'}).text.strip()
+    c.execute('''INSERT INTO cpu VALUES(?,?,?,?,?)''', (current_date, store, title, price, stock))
+    #print(current_date, store, title, price, stock)
     return
 
 
